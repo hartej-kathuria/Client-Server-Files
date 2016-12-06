@@ -7,12 +7,17 @@
 
 #include <string.h>
 
-int main( int argc, char *argv[] ) 
-{
+//funtion to calculate the factorial of a number
+
+
+
+//server function
+int main( int argc, char *argv[] ) {
    int sockfd, newsockfd, portno, clilen;
    char buffer[256];
    struct sockaddr_in serv_addr, cli_addr;
-   int  n;
+   int  n,fact = 0,factor = 0,i;
+char command[20];
    
    /* First call to socket() function */
    sockfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -24,7 +29,7 @@ int main( int argc, char *argv[] )
    
    /* Initialize socket structure */
    bzero((char *) &serv_addr, sizeof(serv_addr));
-   portno = 5003;
+   portno = 5005;
    
    serv_addr.sin_family = AF_INET;
    serv_addr.sin_addr.s_addr = INADDR_ANY;
@@ -54,40 +59,24 @@ int main( int argc, char *argv[] )
    /* If connection is established then start communicating */
    bzero(buffer,256);
    n = read( newsockfd,buffer,255 );
-   int num=0;
+   
    if (n < 0) {
       perror("ERROR reading from socket");
       exit(1);
    }
-   /*int num=atoi(buffer);*/
-   printf("Here is the number: %s\n",buffer);
-   /*printf("number is:%d\n",num);*/
-   int i,factorial;
-   factorial=1;
-   sscanf(buffer,"%d",&num);
-   if (buffer < 0)
-           printf("Error! Factorial of a negative number doesn't exist.");
 
-       else
-       {
-           for(i=num; i>0; i--)
-           {
-               factorial *= i;              // factorial = factorial*i;
-           }
-           /*fac=&factorial;*/
-           /*n = send(newsockfd,fac,5,0);*/
-       }
-   /*printf("factorial is:%d\n",factorial );*/
-   sprintf(buffer,"%d",factorial);
+   sscanf(buffer,"%s",command);
    
+   printf("%s",command);
+   i = system(command);
+   sprintf(buffer,"%d",i);
    /* Write a response to the client */
    n = write(newsockfd,buffer,sizeof(buffer));
    
    if (n < 0) {
       perror("ERROR writing to socket");
       exit(1);
-   }  
+   }
+      
    return 0;
 }
-
-
